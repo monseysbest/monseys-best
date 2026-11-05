@@ -43,8 +43,16 @@ Start here in a new Claude chat. Say: "Read HANDOFF.md and continue."
   `customers.order_reminders` (`merge_order_reminders`). STOP turns them off.
 - Balance policy: $120 limit and 30 days by default; per customer in the chat's Customer panel. `propose_order` says
   exactly what to pay to unlock an order (`toUnlock`).
+- Anything sexual: the `disengage` tool (kind `sexual`) sends the owner's fixed line ("Not going to play along with
+  that one. We're all kosher over here.") and the bot goes quiet. There's no staff alert, and sms-inbound stays silent
+  while it's quiet. That is VERY IMPORTANT to the owner: the bot never engages with sexual content.
+- Pranks: if they want to order, `propose_order.pay_first` takes a pay-first order (`orders.hold_on_pay`). It holds
+  no bread until it's paid; then `holdSweep` holds it (with retries) and `prepayNews` confirms. With no order, the bot
+  sends `disengage` kind `prank` with one sweet line. Pranks never go to staff.
+- Chit-chat: the model marks small-talk replies `[off-topic]` and `text_bot_sessions.chitchat` counts them. At 5 a
+  cute note is added; at 10 the bot goes on a 7-hour break with a goodbye. HUMAN still works during any break.
 
-## What's live (Nov 5)
+## What's live (Nov 5, through PR #266)
 - Admin → Zelle: a searchable customer picker with a confirm step. Customer numbers are 4 digits (C1001…; the sequence
   stops at 9999 on purpose).
 - Shared phone: the bot lists the accounts on that phone and asks which; "both are me" merges them (`merge_customers`).
@@ -53,6 +61,9 @@ Start here in a new Claude chat. Say: "Read HANDOFF.md and continue."
 - "Everything Seeded" is the bread's name everywhere (products, Shopify title, bot, `bread_key`).
 
 ## Open
+0. **Practice-test what merged last (PR #266, Nov 5):** the chit-chat limit (send 10 small-talk texts), a
+   prank who orders (expect the pay-first text), and something sexual (expect the fixed line). The first texts from
+   a new number still alert staff, because sms-inbound alerts before the bot reads them.
 1. **Reminder sender:** nothing sends order reminders yet. Build a weekly job for `order_reminders.on = true` with
    carrier consent. Each text must include the brand name and "Reply STOP to unsubscribe", and match the campaign's
    registered samples (Twilio A2P: Low Volume Mixed, verified; ask the owner to read the samples from the console).
